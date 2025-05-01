@@ -74,16 +74,15 @@ class Client:
             print("All fields are required. Registration failed.")
             sys.exit(0)
 
-        # Check if user already exists
-        existing = next((u for u in self.users if u.email == email), None)
-        if existing:
+        if any(u.email == email for u in self.users):
             print("User already exists. Try logging in.")
             sys.exit(0)
 
         new_user = UserEntry(email, name, password)
         self.users.append(new_user)
+        self.save_user(new_user)
         self.name = name
-
+   
         with open("users.txt", "a") as f:
             f.write(new_user.to_line())
 
